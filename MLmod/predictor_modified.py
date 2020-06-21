@@ -165,11 +165,13 @@ class BasePredictions:
                     n_jobs= -1)
             
         elif self.clf.lower() == "neural_network":
-            def Neural_network():
+                        def Neural_network():
                 clf = Sequential()
                 
                 # Approach 1
                 clf.add(Dense(32, activation="relu"))#, input_dim=1))
+                clf.add(Dropout(0.2))
+                clf.add(Dense(32, activation="relu"))
                 clf.add(Dropout(0.2))
                 clf.add(Dense(32, activation="relu"))
                 clf.add(Dropout(0.2))

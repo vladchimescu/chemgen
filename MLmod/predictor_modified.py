@@ -181,6 +181,7 @@ class BasePredictions:
                 #1 Approach 2
                 #clf.add(Dense(32, activation="relu"))
                 #clf.add(Dropout(0.5))
+                #clf.add(Dense(32, activation="relu"))
                 #clf.add(Dense(3, activation="softmax"))             
                 
                 # Approach 3

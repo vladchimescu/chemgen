@@ -33,12 +33,12 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
             "scale_pos_weight": np.linspace(1,10,20)
             }
 # DL has 10 * 10 * 5 * 5 * 5 * 10 * 10 = 972 combinations of hyperparameters
-DL_grid = {"learning_rate_deep": np.linspace(0.001,0.005,0.1),
+DL_grid = {"learning_rate_deep": [0.001,0.005,0.1],
              "layers": [1,3,5],
              "nodes": [16,32,64],
-             "dropout": np.linspace(0.1,0.25,0.5),
+             "dropout": [0.1,0.25,0.5],
              "steps": [32,64],
-             "epochs": np.linspace(200,400),
+             "epochs": [200,400],
              "class_weight": [{0: 1, 1: i} for i in range(1,3)] + ['balanced', 'balanced_subsample']
              }
 outdir = "data/optimization/chemgen/"

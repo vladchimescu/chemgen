@@ -32,13 +32,14 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
             "n_estimators": [200, 500, 1000],
             "scale_pos_weight": np.linspace(1,10,20)
             }
-# DL has 20 * 10 * 5 * 5 * 5 * 10 = 62.500 combinations of hyperparameters
-DL_grid = = {"learning_rate_deep": np.linspace(0.01,0.5, 20),
+# DL has 10 * 10 * 5 * 5 * 5 * 10 * 10= 312.500 combinations of hyperparameters
+DL_grid = = {"learning_rate_deep": np.linspace(0.001,0.1, 10),
              "layers": np.linspace(1,5,5),
              "nodes": [8,16,32,64,128],
              "dropout": np.linspace(0.1,0.5,5),
              "steps": [16,32,64,128],
-             "epochs": np.linspace(100,1000,5)
+             "epochs": np.linspace(100,1000,5),
+             "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']
              }
 outdir = "data/optimization/chemgen/"
 drugleg_fname = "data/chemicals/legend_gramnegpos.txt"

@@ -60,7 +60,7 @@ if __name__ == "__main__":
         pgrid = ParameterGrid(xgb_grid)
         indices = np.array_split(np.arange(len(pgrid)), 10000)   
     if sys.argv[3] == 'neural_network':
-        pgrid = ParameterGrid(xgb_grid)
+        pgrid = ParameterGrid(DL_grid)
         indices = np.array_split(np.arange(len(pgrid)), 10000)
 
     print("Total grid size: ", len(pgrid))

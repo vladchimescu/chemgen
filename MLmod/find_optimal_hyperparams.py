@@ -10,7 +10,7 @@ import sys
 from sklearn.model_selection import ParameterGrid
 
 import chemgen_utils as utl
-import predictor as prd
+import predictor_modified as prd
 
 """ 
 Find optimal hyperparameters of the RandomForestClassifier and

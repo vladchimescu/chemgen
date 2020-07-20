@@ -22,7 +22,7 @@ from keras.utils.vis_utils import model_to_dot
 from keras.utils import plot_model
 from kt_utils import *
 from tensorflow.keras.callbacks import TensorBoard
-from keras.callbacks.callbacks import ModelCheckpoint
+#from keras.callbacks.callbacks import ModelCheckpoint
 #import keras.backend as K
 K.set_image_data_format('channels_last')
 import matplotlib.pyplot as plt
@@ -127,9 +127,18 @@ class BasePredictions:
         self.max_depth = kwargs.get("max_depth", None)
         self.objective = kwargs.get("objective", 'binary:logistic')
         self.scale_pos_weight = kwargs.get("scale_pos_weight", 1)
-
+        
+        #for neural net
+        self.layers = kwargs.get("layers", 3)
+        self.dropout = kwargs.get("dropout", 0.2)
+        self.nodes = kwargs.get("nodes", 32)
+        self.epochs = kwargs.get("epochs", 300)
+        self.steps = kwargs.get("steps", 32)
+        self.learning_rate_deep = kwargs.get("learning_rate_deep", 0.001)
+        self.beta_1 = kwargs.get("beta_1", 0.9)
+        self.beta_2 = kwargs.get("beta_2", 0.999)
+        
         self._set_classifier()
-
         self.predicted = dict()
         self.topfeat = dict()
         self.fpr = dict()
@@ -165,23 +174,28 @@ class BasePredictions:
                     n_jobs= -1)
             
         elif self.clf.lower() == "neural_network":
-                        def Neural_network():
+            def Neural_network():
                 clf = Sequential()
                 
-                # Approach 1
-                clf.add(Dense(32, activation="relu"))#, input_dim=1))
-                clf.add(Dropout(0.2))
-                clf.add(Dense(32, activation="relu"))
-                clf.add(Dropout(0.2))
-                clf.add(Dense(32, activation="relu"))
-                clf.add(Dropout(0.2))
-                clf.add(Dense(32, activation="relu"))
+                for i in range(self.layers):
+                    clf.add(Dense(self.nodes, activation="relu"))
+                    clf.add(Dropout(self.dropout))
                 clf.add(Dense(3, activation="softmax"))
                 
+                # Approach 1
+                # clf.add(Dense(32, activation="relu"))#, input_dim=1))
+                # clf.add(Dropout(0.2))
+                # clf.add(Dense(32, activation="relu"))
+                # clf.add(Dropout(0.2))
+                # clf.add(Dense(32, activation="relu"))
+                # clf.add(Dropout(0.2))
+                # clf.add(Dense(32, activation="relu"))
+                # clf.add(Dense(3, activation="softmax"))
+                
                 #1 Approach 2
-                #clf.add(Dense(32, activation="relu"))
-                #clf.add(Dropout(0.5))
-                #clf.add(Dense(3, activation="softmax"))             
+                # clf.add(Dense(32, activation="relu"))
+                # clf.add(Dropout(0.5))
+                # clf.add(Dense(3, activation="softmax"))             
                 
                 # Approach 3
                 # n_layers = 5
@@ -207,10 +221,10 @@ class BasePredictions:
                 # clf.add(Dense(3, use_bias=True))
                 # clf.add(Activation('softmax'))
                 
-
-                clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = "adam",  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
+                opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep, beta_1=self.beta_1, beta_2=self.beta_2)
+                clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
-            self.clf = KerasClassifier(Neural_network, epochs = 200, steps_per_epoch=32,
+            self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps,
                     class_weight=self.class_weight)
             
         else:

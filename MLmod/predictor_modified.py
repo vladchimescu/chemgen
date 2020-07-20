@@ -135,8 +135,8 @@ class BasePredictions:
         self.epochs = kwargs.get("epochs", 300)
         self.steps = kwargs.get("steps", 32)
         self.learning_rate_deep = kwargs.get("learning_rate_deep", 0.001)
-        self.beta_1 = kwargs.get("beta_1", 0.9)
-        self.beta_2 = kwargs.get("beta_2", 0.999)
+        #self.beta_1 = kwargs.get("beta_1", 0.9)
+        #self.beta_2 = kwargs.get("beta_2", 0.999)
         
         self._set_classifier()
         self.predicted = dict()
@@ -221,7 +221,7 @@ class BasePredictions:
                 # clf.add(Dense(3, use_bias=True))
                 # clf.add(Activation('softmax'))
                 
-                opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep, beta_1=self.beta_1, beta_2=self.beta_2)
+                opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
             self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps,

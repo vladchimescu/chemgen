@@ -1,12 +1,10 @@
 #!/bin/bash
                                                                                                                                  
-#SBATCH -t 00:45:00                                                             
+#SBATCH -t 01:00:00                                                             
 #SBATCH -n 1 
 #SBATCH -p htc                                                                   
-#SBATCH --mem=16G                                                               
-#SBATCH --mail-user=stefan.bassler@embl.de                                     
+#SBATCH --mem=16G                                                                                                    
 #SBATCH --output=/g/typas/Personal_Folders/bassler/chem_gen/logs/slurm.out
-#SBATCH --mail-type=FAIL 
 
 source activate my-mofa-env
 

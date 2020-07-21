@@ -12,6 +12,33 @@ from sklearn.model_selection import ParameterGrid
 import chemgen_utils as utl
 import predictor_modified as prd
 
+import csv
+import datetime
+import tensorflow as tf
+from sklearn.metrics import classification_report
+from tensorflow import keras
+from tensorflow.keras import layers
+#from keras import layers
+from tensorflow.keras.layers import Input, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D
+from tensorflow.keras.layers import AveragePooling2D, MaxPooling2D, Dropout, GlobalMaxPooling2D, GlobalAveragePooling2D
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing import image
+from keras.utils import layer_utils
+from keras.utils.data_utils import get_file
+from keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.applications.imagenet_utils import preprocess_input
+import pydot
+from IPython.display import SVG
+from keras.utils.vis_utils import model_to_dot
+from keras.utils import plot_model
+from kt_utils import *
+from tensorflow.keras.callbacks import TensorBoard
+#from keras.callbacks.callbacks import ModelCheckpoint
+#import keras.backend as K
+K.set_image_data_format('channels_last')
+from matplotlib.pyplot import imshow
+
 """ 
 Find optimal hyperparameters of the RandomForestClassifier and
 XGBClassifier
@@ -41,7 +68,8 @@ DL_grid = {"learning_rate_deep": [0.001,0.005,0.1],
              "epochs": [200,400],
              "class_weight": [{0: 1, 1: i} for i in range(1,3)] + ['balanced', 'balanced_subsample']
              }
-outdir = "data/optimization/chemgen/"
+
+outdir = "/g/typas/Personal_Folders/bassler/chem_gen/data/optimization"
 drugleg_fname = "data/chemicals/legend_gramnegpos.txt"
 
 if __name__ == "__main__":
@@ -57,12 +85,14 @@ if __name__ == "__main__":
     if sys.argv[3] == 'randomforest':
         pgrid = ParameterGrid(RF_grid)
         indices = np.array_split(np.arange(len(pgrid)), 1000)
+        
     if sys.argv[3] == 'xgboost':
         pgrid = ParameterGrid(xgb_grid)
-        indices = np.array_split(np.arange(len(pgrid)), 10000)   
+        indices = np.array_split(np.arange(len(pgrid)), 10000)
+        
     if sys.argv[3] == 'neural_network':
         pgrid = ParameterGrid(DL_grid)
-        indices = np.array_split(np.arange(len(pgrid)), 10000)
+        indices = np.array_split(np.arange(len(pgrid)), 1000)
 
     print("Total grid size: ", len(pgrid))
     print("Length of indices: ", len(indices))
@@ -127,5 +157,3 @@ if __name__ == "__main__":
     metrics_df['index'] = indices[int(sys.argv[4])]
     metrics_df.to_csv(outdir + strain + "-SN-" + str(sys.argv[4]) + ".tsv", sep='\t',
                       index=False)
-   
-

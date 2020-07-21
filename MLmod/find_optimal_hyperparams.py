@@ -59,7 +59,7 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
             "n_estimators": [200, 500, 1000],
             "scale_pos_weight": np.linspace(1,10,20)
             }
-# DL has 10 * 10 * 5 * 5 * 5 * 10 * 10 = 972 combinations of hyperparameters
+# DL has 10 * 10 * 5 * 5 * 5 * 10 * 10 = 1296 combinations of hyperparameters
 DL_grid = {"learning_rate_deep": [0.001,0.005,0.1],
              "layers": [1,3,5],
              "nodes": [16,32,64],
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         
     if sys.argv[3] == 'neural_network':
         pgrid = ParameterGrid(DL_grid)
-        indices = np.array_split(np.arange(len(pgrid)), 1000)
+        indices = np.array_split(np.arange(len(pgrid)), 1296)
 
     print("Total grid size: ", len(pgrid))
     print("Length of indices: ", len(indices))
@@ -157,3 +157,5 @@ if __name__ == "__main__":
     metrics_df['index'] = indices[int(sys.argv[4])]
     metrics_df.to_csv(outdir + strain + "-SN-" + str(sys.argv[4]) + ".tsv", sep='\t',
                       index=False)
+   
+

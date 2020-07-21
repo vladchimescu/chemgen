@@ -4,16 +4,14 @@
 #SBATCH -p htc                                                                  
 #SBATCH -t 00:30:00                                                             
 #SBATCH -n 1                                                                    
-#SBATCH --mem=8G                                                               
-#SBATCH --mail-user=stefan.bassler@embl.de                                                
-#SBATCH --mail-type=FAIL,END 
+#SBATCH --mem=8G                                                                                                              
 
 script=$1
 Xdata=$2
 ydata=$3
 clf=$4
 
-for i in `seq 0 999`
+for i in `seq 0 1297`
 do
 	sbatch bashscripts/optimize.sh $script $Xdata $ydata $clf $i
 done

@@ -27,71 +27,15 @@ from tensorflow.keras.callbacks import TensorBoard
 K.set_image_data_format('channels_last')
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
-# Load the TensorBoard notebook extension
-
-
-#####DL Model#####
-#def HappyModel(input_shape, n_layers, l1_coef, l2_coef):
-#    X_input = Input(input_shape)
-#    # Deep_neural network with  n_layers (1)
-#    #X = Dense(64, activation= "linear", name='fc_start', use_bias='false', kernel_initializer="glorot_normal",
-#    #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X_input)
-#    #X = BatchNormalization(axis = 1, name = 'bn_start')(X)
-#    #X = Activation('relu')(X)
-#    
-#    #for i in range(n_layers):
-#    #    X = Dense(64, activation= "linear", name='fc_'+str(i), use_bias='false', kernel_initializer="glorot_normal",
-#    #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X)
-#    #    X = BatchNormalization(axis = 1, name = 'bn_'+str(i))(X)
-#    #    X = Activation('relu')(X)
-        
-#     #X = Dense(1, activation= "relu", name='fc_end', use_bias='True', kernel_initializer="glorot_normal",
-#     #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X)
-#     #X = BatchNormalization(axis = 1, name = 'bn_end')(X)
-    
-#     #X = Dense(3, use_bias=True)(X)
-#     #X = Activation('softmax')(X)
-    
-#     #1/2 fully_connected layer neural network to predict nteractions (Francois Chollet) (2)
-#     X = Dense(32, activation="relu")(X_input)
-#     X = Dropout(0.5)(X)
-#     X = Dense(32, activation="relu")(X)
-#     X = Dense(3, activation="softmax")(X)
-    
-#     #1 fully_connected layer neural network to predict MoA (Francois Chollet) (3)
-#     #X = Dense(64, activation="relu")(X_input)
-#     #X = Dropout(0.5)(X)
-#     #X = Dense(1, activation="softmax")(X)
-
-#     # Create model. This creates your Keras model instance, you'll use this instance to train/test the model.
-#     model = Model(inputs = X_input, outputs = X, name='HappyModel')
-
-#     return model
-# n_layers = 10
-# l1_coef = 0.1
-# l2_coef = 0.1
-# ### START CODE HERE ### (1 line)
-# happyModel = HappyModel(X_onehot.to_numpy().shape[1:],n_layers, l1_coef, l2_coef)
-# happyModel.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy", tf.keras.metrics.Precision()])
-# happyModel.fit(x = X_train, y = Y_train, epochs = 300, steps_per_epoch=16, class_weight=class_weight)
-
-# happyModel.fit(epochs = 300, steps_per_epoch=16,
-#                     class_weight=self.class_weight, learning_rate=self.learning_rate)
-
-
-
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib as mpl
 import sys
-
 import numpy as np
 import pandas as pd
 import os
-
 from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
-
 from scipy import interp
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import precision_recall_curve

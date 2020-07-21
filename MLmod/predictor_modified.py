@@ -34,8 +34,10 @@ import sys
 import numpy as np
 import pandas as pd
 import os
+
 from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
+
 from scipy import interp
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import precision_recall_curve
@@ -167,8 +169,11 @@ class InteractionPredictions(BasePredictions):
             combs_test = self.combs[test]
 
             print("Test set size in %s: %d" % (cl, X_test.shape[0]))
-
-            probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            
+            #probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
 
             pred_df = pd.DataFrame({'comb': combs_test,
                                      'prob': probas_[:,1]})
@@ -449,7 +454,10 @@ class ObjectiveFun(BasePredictions):
             X_test = self.X[test]
             y_test = self.y[test]
             combs_test = self.combs[test]
-            probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            #probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
 
             precision, recall, _ = precision_recall_curve(y_test, probas_[:,1])
             average_precision = average_precision_score(y_test, probas_[:,1])
@@ -634,7 +642,10 @@ class MultiObjective(ObjectiveFun):
             y_test = self.y[test]
             combs_test = self.combs[test]
             
-            probas_ = clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            
+            #probas_ = clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
             
             precision = dict()
             recall = dict()

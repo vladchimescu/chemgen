@@ -63,7 +63,7 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
 DL_grid = {"learning_rate_deep": [0.001,0.005,0.1],
              "layers": [1,3,5],
              "nodes": [16,32,64],
-             "dropout": [0.1,0.25,0.5],
+             "dropout": [0.1,0.3,0.5],
              "steps": [32,64],
              "epochs": [200,400],
              "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample']

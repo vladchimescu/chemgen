@@ -66,7 +66,7 @@ DL_grid = {"learning_rate_deep": [0.001,0.005,0.1],
              "dropout": [0.1,0.25,0.5],
              "steps": [32,64],
              "epochs": [200,400],
-             "class_weight": [{0: 1, 1: i} for i in range(1,3)] + ['balanced', 'balanced_subsample']
+             "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample']
              }
 
 outdir = "/g/typas/Personal_Folders/bassler/chem_gen/data/optimization"

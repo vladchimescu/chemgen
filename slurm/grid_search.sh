@@ -13,7 +13,7 @@ Xdata=$2
 ydata=$3
 clf=$4
 
-for i in `seq 0 2`
+for i in `seq 0 999`
 do
 	sbatch bashscripts/optimize.sh $script $Xdata $ydata $clf $i
 done

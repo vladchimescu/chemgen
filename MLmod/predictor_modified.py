@@ -105,7 +105,7 @@ from  itertools import cycle
 from scipy.interpolate import make_interp_spline, BSpline
 
 sys.path.append('..')
-from base.chemgen_utils import split_drug_class
+from chemgen_utils import split_drug_class
 
 class BasePredictions:
     def __init__(self, **kwargs):
@@ -174,7 +174,7 @@ class BasePredictions:
                     n_jobs= -1)
             
         elif self.clf.lower() == "neural_network":
-            def Neural_network():
+            def Neural_network(dropout=0.2, nodes=32, layers=3, learning_rate_deep=0.001):
                 clf = Sequential()
                 
                 for i in range(self.layers):
@@ -197,35 +197,11 @@ class BasePredictions:
                 # clf.add(Dropout(0.5))
                 # clf.add(Dense(3, activation="softmax"))             
                 
-                # Approach 3
-                # n_layers = 5
-                # l1_coef = 0.1
-                # l2_coef = 0.1
-
-                # # Deep_neural network with  n_layers (1)
-                # clf.add(Dense(64, activation= "linear", name='fc_start', use_bias='false', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                # clf.add(BatchNormalization(axis = 1, name = 'bn_start'))
-                # clf.add(Activation('relu'))
-                
-                # for i in range(n_layers):
-                #     clf.add(Dense(64, activation= "linear", name='fc_'+str(i), use_bias='false', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                #     clf.add(BatchNormalization(axis = 1, name = 'bn_'+str(i)))
-                #     clf.add(Activation('relu'))
-                    
-                # clf.add(Dense(1, activation= "relu", name='fc_end', use_bias='True', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                # clf.add(BatchNormalization(axis = 1, name = 'bn_end'))
-                
-                # clf.add(Dense(3, use_bias=True))
-                # clf.add(Activation('softmax'))
-                
                 opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
             self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps,
-                    class_weight=self.class_weight)
+                    class_weight=self.class_weight, dropout = self.dropout, nodes = self.nodes, layers = self.layers, learning_rate_deep = self.learning_rate_deep)
             
         else:
             raise ValueError("only randomforest, xgboost and neural_network are supported")
@@ -737,4 +713,3 @@ class MultiObjective(ObjectiveFun):
          reset_index().rename(columns={"level_0": "cvfold"}).
          drop(columns=["level_1"]))
         return ap_df
-        

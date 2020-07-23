@@ -122,26 +122,16 @@ class BasePredictions:
         elif self.clf.lower() == "neural_network":
             def Neural_network(dropout=0.2, nodes=32, layers=3, learning_rate_deep=0.001):
                 clf = Sequential()
-                
                 for i in range(self.layers):
-                    clf.add(Dense(self.nodes, activation="relu"))
+                    #With BN
+                    clf.add(Dense(self.nodes, activation="linear", use_bias="False"))
+                    clf.add(BatchNormalization())
+                    clf.add(Activation("relu"))
                     clf.add(Dropout(self.dropout))
-                clf.add(Dense(3, activation="softmax"))
-                
-                # Approach 1
-                # clf.add(Dense(32, activation="relu"))#, input_dim=1))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dense(3, activation="softmax"))
-                
-                #1 Approach 2
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.5))
-                # clf.add(Dense(3, activation="softmax"))             
+                    #Without BN
+                    #clf.add(Dense(self.nodes, activation="relu"))
+                    #clf.add(Dropout(self.dropout))
+                clf.add(Dense(3, activation="softmax"))         
                 
                 opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"

@@ -1,6 +1,6 @@
 #!/bin/bash
                                                                                                                                  
-#SBATCH -t 01:00:00                                                             
+#SBATCH -t 01:30:00                                                             
 #SBATCH -n 1 
 #SBATCH -p htc                                                                   
 #SBATCH --mem=16G                                                                                                    

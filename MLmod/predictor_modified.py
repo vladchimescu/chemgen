@@ -124,13 +124,13 @@ class BasePredictions:
                 clf = Sequential()
                 for i in range(self.layers):
                     #With BN
-                    #clf.add(Dense(self.nodes, activation="linear", use_bias="False"))
-                    #clf.add(BatchNormalization())
-                    #clf.add(Activation("relu"))
-                    #clf.add(Dropout(self.dropout))
-                    #Without BN
-                    clf.add(Dense(self.nodes, activation="relu"))
+                    clf.add(Dense(self.nodes, activation="linear", use_bias="False"))
+                    clf.add(BatchNormalization())
+                    clf.add(Activation("relu"))
                     clf.add(Dropout(self.dropout))
+                    #Without BN
+                    #clf.add(Dense(self.nodes, activation="relu"))
+                    #clf.add(Dropout(self.dropout))
                 clf.add(Dense(3, activation="softmax"))         
                 
                 opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)

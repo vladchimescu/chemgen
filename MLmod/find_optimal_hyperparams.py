@@ -60,13 +60,13 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
             "scale_pos_weight": np.linspace(1,10,20)
             }
 # DL has 3240 combinations of hyperparameters
-DL_grid = {"learning_rate_deep": [0.001,0.005,0.01,0.1],
-             "layers": [1,3,5],
-             "nodes": [16,32,64],
-             "dropout": [0.1,0.3,0.5],
+DL_grid = {"learning_rate_deep": [0.001,0.005,0.01,0.1], #[0.001,0.01,0.1,1] (EXTreme parameters)
+             "layers": [1,3,5], #[1,4,7]
+             "nodes": [16,32,64], #[16,64,128]
+             "dropout": [0.1,0.3,0.5], #[0.1,0.4,0.7]
              "steps": [32,64],
              "epochs": [400,600,800],
-             "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample']
+             "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample'] #[1,4,7]
              }
 
 outdir = "/g/typas/Personal_Folders/bassler/chem_gen/data/optimization"

@@ -12,6 +12,33 @@ from sklearn.model_selection import ParameterGrid
 import chemgen_utils as utl
 import predictor_modified as prd
 
+import csv
+import datetime
+import tensorflow as tf
+from sklearn.metrics import classification_report
+from tensorflow import keras
+from tensorflow.keras import layers
+#from keras import layers
+from tensorflow.keras.layers import Input, Dense, Activation, ZeroPadding2D, BatchNormalization, Flatten, Conv2D
+from tensorflow.keras.layers import AveragePooling2D, MaxPooling2D, Dropout, GlobalMaxPooling2D, GlobalAveragePooling2D
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing import image
+from keras.utils import layer_utils
+from keras.utils.data_utils import get_file
+from keras.wrappers.scikit_learn import KerasClassifier
+from tensorflow.keras.applications.imagenet_utils import preprocess_input
+import pydot
+from IPython.display import SVG
+from keras.utils.vis_utils import model_to_dot
+from keras.utils import plot_model
+from kt_utils import *
+from tensorflow.keras.callbacks import TensorBoard
+#from keras.callbacks.callbacks import ModelCheckpoint
+#import keras.backend as K
+K.set_image_data_format('channels_last')
+from matplotlib.pyplot import imshow
+
 """ 
 Find optimal hyperparameters of the RandomForestClassifier and
 XGBClassifier
@@ -32,16 +59,17 @@ xgb_grid = {"learning_rate": np.linspace(0.1,0.9, 20),
             "n_estimators": [200, 500, 1000],
             "scale_pos_weight": np.linspace(1,10,20)
             }
-# DL has 10 * 10 * 5 * 5 * 5 * 10 * 10= 312.500 combinations of hyperparameters
-DL_grid = = {"learning_rate_deep": np.linspace(0.001,0.1, 10),
-             "layers": np.linspace(1,5,5),
-             "nodes": [8,16,32,64,128],
-             "dropout": np.linspace(0.1,0.5,5),
-             "steps": [16,32,64,128],
-             "epochs": np.linspace(100,1000,5),
-             "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']
+# DL has 3240 combinations of hyperparameters
+DL_grid = {"learning_rate_deep": [0.001,0.005,0.01,0.1], #[0.001,0.01,0.1,1] (EXTreme parameters)
+             "layers": [1,3,5], #[1,4,7]
+             "nodes": [16,32,64], #[16,64,128]
+             "dropout": [0.1,0.3,0.5], #[0.1,0.4,0.7]
+             "steps": [32,64],
+             "epochs": [400,600,800],
+             "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample'] #[1,4,7]
              }
-outdir = "data/optimization/chemgen/"
+
+outdir = "/g/typas/Personal_Folders/bassler/chem_gen/data/optimization"
 drugleg_fname = "data/chemicals/legend_gramnegpos.txt"
 
 if __name__ == "__main__":
@@ -57,12 +85,14 @@ if __name__ == "__main__":
     if sys.argv[3] == 'randomforest':
         pgrid = ParameterGrid(RF_grid)
         indices = np.array_split(np.arange(len(pgrid)), 1000)
+        
     if sys.argv[3] == 'xgboost':
         pgrid = ParameterGrid(xgb_grid)
-        indices = np.array_split(np.arange(len(pgrid)), 10000)   
+        indices = np.array_split(np.arange(len(pgrid)), 10000)
+        
     if sys.argv[3] == 'neural_network':
         pgrid = ParameterGrid(DL_grid)
-        indices = np.array_split(np.arange(len(pgrid)), 10000)
+        indices = np.array_split(np.arange(len(pgrid)), 3240)
 
     print("Total grid size: ", len(pgrid))
     print("Length of indices: ", len(indices))

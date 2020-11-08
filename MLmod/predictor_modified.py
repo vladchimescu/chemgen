@@ -27,64 +27,10 @@ from tensorflow.keras.callbacks import TensorBoard
 K.set_image_data_format('channels_last')
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import imshow
-# Load the TensorBoard notebook extension
-
-
-#####DL Model#####
-#def HappyModel(input_shape, n_layers, l1_coef, l2_coef):
-#    X_input = Input(input_shape)
-#    # Deep_neural network with  n_layers (1)
-#    #X = Dense(64, activation= "linear", name='fc_start', use_bias='false', kernel_initializer="glorot_normal",
-#    #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X_input)
-#    #X = BatchNormalization(axis = 1, name = 'bn_start')(X)
-#    #X = Activation('relu')(X)
-#    
-#    #for i in range(n_layers):
-#    #    X = Dense(64, activation= "linear", name='fc_'+str(i), use_bias='false', kernel_initializer="glorot_normal",
-#    #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X)
-#    #    X = BatchNormalization(axis = 1, name = 'bn_'+str(i))(X)
-#    #    X = Activation('relu')(X)
-        
-#     #X = Dense(1, activation= "relu", name='fc_end', use_bias='True', kernel_initializer="glorot_normal",
-#     #          kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef))(X)
-#     #X = BatchNormalization(axis = 1, name = 'bn_end')(X)
-    
-#     #X = Dense(3, use_bias=True)(X)
-#     #X = Activation('softmax')(X)
-    
-#     #1/2 fully_connected layer neural network to predict nteractions (Francois Chollet) (2)
-#     X = Dense(32, activation="relu")(X_input)
-#     X = Dropout(0.5)(X)
-#     X = Dense(32, activation="relu")(X)
-#     X = Dense(3, activation="softmax")(X)
-    
-#     #1 fully_connected layer neural network to predict MoA (Francois Chollet) (3)
-#     #X = Dense(64, activation="relu")(X_input)
-#     #X = Dropout(0.5)(X)
-#     #X = Dense(1, activation="softmax")(X)
-
-#     # Create model. This creates your Keras model instance, you'll use this instance to train/test the model.
-#     model = Model(inputs = X_input, outputs = X, name='HappyModel')
-
-#     return model
-# n_layers = 10
-# l1_coef = 0.1
-# l2_coef = 0.1
-# ### START CODE HERE ### (1 line)
-# happyModel = HappyModel(X_onehot.to_numpy().shape[1:],n_layers, l1_coef, l2_coef)
-# happyModel.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy", tf.keras.metrics.Precision()])
-# happyModel.fit(x = X_train, y = Y_train, epochs = 300, steps_per_epoch=16, class_weight=class_weight)
-
-# happyModel.fit(epochs = 300, steps_per_epoch=16,
-#                     class_weight=self.class_weight, learning_rate=self.learning_rate)
-
-
-
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib as mpl
 import sys
-
 import numpy as np
 import pandas as pd
 import os
@@ -105,7 +51,7 @@ from  itertools import cycle
 from scipy.interpolate import make_interp_spline, BSpline
 
 sys.path.append('..')
-from base.chemgen_utils import split_drug_class
+from chemgen_utils import split_drug_class
 
 class BasePredictions:
     def __init__(self, **kwargs):
@@ -174,58 +120,24 @@ class BasePredictions:
                     n_jobs= -1)
             
         elif self.clf.lower() == "neural_network":
-            def Neural_network():
+            def Neural_network(dropout=0.2, nodes=32, layers=3, learning_rate_deep=0.001):
                 clf = Sequential()
-                
                 for i in range(self.layers):
+                    #With BN
+                    #clf.add(Dense(self.nodes, activation="linear", use_bias="False"))
+                    #clf.add(BatchNormalization())
+                    #clf.add(Activation("relu"))
+                    #clf.add(Dropout(self.dropout))
+                    #Without BN
                     clf.add(Dense(self.nodes, activation="relu"))
                     clf.add(Dropout(self.dropout))
-                clf.add(Dense(3, activation="softmax"))
-                
-                # Approach 1
-                # clf.add(Dense(32, activation="relu"))#, input_dim=1))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.2))
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dense(3, activation="softmax"))
-                
-                #1 Approach 2
-                # clf.add(Dense(32, activation="relu"))
-                # clf.add(Dropout(0.5))
-                # clf.add(Dense(3, activation="softmax"))             
-                
-                # Approach 3
-                # n_layers = 5
-                # l1_coef = 0.1
-                # l2_coef = 0.1
-
-                # # Deep_neural network with  n_layers (1)
-                # clf.add(Dense(64, activation= "linear", name='fc_start', use_bias='false', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                # clf.add(BatchNormalization(axis = 1, name = 'bn_start'))
-                # clf.add(Activation('relu'))
-                
-                # for i in range(n_layers):
-                #     clf.add(Dense(64, activation= "linear", name='fc_'+str(i), use_bias='false', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                #     clf.add(BatchNormalization(axis = 1, name = 'bn_'+str(i)))
-                #     clf.add(Activation('relu'))
-                    
-                # clf.add(Dense(1, activation= "relu", name='fc_end', use_bias='True', kernel_initializer="glorot_normal",
-                #           kernel_regularizer=tf.keras.regularizers.l1_l2(l1_coef, l2_coef)))
-                # clf.add(BatchNormalization(axis = 1, name = 'bn_end'))
-                
-                # clf.add(Dense(3, use_bias=True))
-                # clf.add(Activation('softmax'))
+                clf.add(Dense(3, activation="softmax"))         
                 
                 opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
             self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps,
-                    class_weight=self.class_weight)
+                    class_weight=self.class_weight, dropout = self.dropout, nodes = self.nodes, layers = self.layers, learning_rate_deep = self.learning_rate_deep)
             
         else:
             raise ValueError("only randomforest, xgboost and neural_network are supported")
@@ -247,8 +159,11 @@ class InteractionPredictions(BasePredictions):
             combs_test = self.combs[test]
 
             print("Test set size in %s: %d" % (cl, X_test.shape[0]))
-
-            probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            
+            #probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
 
             pred_df = pd.DataFrame({'comb': combs_test,
                                      'prob': probas_[:,1]})
@@ -529,7 +444,10 @@ class ObjectiveFun(BasePredictions):
             X_test = self.X[test]
             y_test = self.y[test]
             combs_test = self.combs[test]
-            probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            #probas_ = self.clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
 
             precision, recall, _ = precision_recall_curve(y_test, probas_[:,1])
             average_precision = average_precision_score(y_test, probas_[:,1])
@@ -714,7 +632,10 @@ class MultiObjective(ObjectiveFun):
             y_test = self.y[test]
             combs_test = self.combs[test]
             
-            probas_ = clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
+            self.clf.fit(self.X[train], self.y[train])
+            probas_ = self.clf.predict_proba(X_test)
+            
+            #probas_ = clf.fit(self.X[train], self.y[train]).predict_proba(X_test)
             
             precision = dict()
             recall = dict()
@@ -737,4 +658,3 @@ class MultiObjective(ObjectiveFun):
          reset_index().rename(columns={"level_0": "cvfold"}).
          drop(columns=["level_1"]))
         return ap_df
-        

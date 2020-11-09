@@ -25,8 +25,14 @@ split_vec = lambda x: x.split("_")
 # for the binary feature matrix
 def get_comb_feat(chemgen, c):
     comb_feat = chemgen.loc[split_vec(c),:]
-    
-    return comb_feat.sum(axis=0)
+    comb_sum = comb_feat.sum(axis=0)
+    return comb_sum
+
+def get_comb_feat_signed(chemgen, c):
+    comb_feat = chemgen.loc[split_vec(c),:]
+    comb_sum = comb_feat.sum(axis=0)
+    comb_signed = comb_sum + 3*(np.abs(comb_feat.iloc[0,:] - comb_feat.iloc[1,:]) == 2)
+    return comb_signed
 
 
 def add_class(strain, druglegend):

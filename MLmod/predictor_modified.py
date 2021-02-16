@@ -55,7 +55,7 @@ from  itertools import cycle
 from scipy.interpolate import make_interp_spline, BSpline
 
 sys.path.append('..')
-from base.chemgen_utils import split_drug_class
+from chemgen_utils import split_drug_class
 
 def export_rftrees(estimators, outdir, class_names, featname):
         if outdir is not None:
@@ -179,8 +179,7 @@ class BasePredictions:
                 opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
-            self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps,
-                    class_weight=self.class_weight, dropout = self.dropout, nodes = self.nodes, layers = self.layers, learning_rate_deep = self.learning_rate_deep)
+            self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps, dropout = self.dropout, nodes = self.nodes, layers = self.layers, learning_rate_deep = self.learning_rate_deep) #class_weight=self.class_weight
 
         else:
             raise ValueError("only randomforest, xgboost and neural_network are supported")

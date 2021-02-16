@@ -24,8 +24,7 @@ RF_grid = {"max_depth": list(range(2,10)) + [None],
            "n_estimators": [200, 500, 1000],
            "min_samples_split": range(2,10),
            "min_samples_leaf": range(2,10),
-           "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']
-           }
+           "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']}
 
 # XGB has 20 * 20 * 8 * 3 * 10 = 96000 combinations of hyperparameters
 xgb_grid = {"learning_rate": np.logspace(-2,np.log10(0.9), 20),
@@ -36,14 +35,14 @@ xgb_grid = {"learning_rate": np.logspace(-2,np.log10(0.9), 20),
             }
 
 # DL has 10 * 10 * 5 * 5 * 5 * 10 * 10 = 2880 combinations of hyperparameters
-DL_grid = {"learning_rate_deep": [0.001,0.005,0.01,0.1],
-             "layers": [1,3,5],
+DL_grid = {"learning_rate_deep": [0.001,0.005,0.01,0.1,1],
+             "layers": [1,3,5,7],
              "nodes": [16,32,64,128],
-             "dropout": [0.1,0.3,0.5],
-             "steps": [32,64],
-             "epochs": [400, 600],
-             "class_weight": [{0: 1, 1: i} for i in [1,3,5]] + ['balanced', 'balanced_subsample']
-             }
+             "dropout": [0.1,0.3,0.5,0.7],
+             "steps": [32,64,128],
+             "epochs": [400, 600, 800]}
+             #"class_weight": {0:1, 1:2, 2:10}
+             
 
 # function for generating train / validation splits
 # by choosing randomly 15 drugs and withholding all pairwise combinations

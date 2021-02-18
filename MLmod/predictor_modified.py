@@ -116,14 +116,14 @@ class BasePredictions:
 
 
         #for neural net
-        self.layers = kwargs.get("layers", 3)
-        self.dropout = kwargs.get("dropout", 0.2)
-        self.nodes = kwargs.get("nodes", 32)
-        self.epochs = kwargs.get("epochs", 200)
-        self.steps = kwargs.get("steps", 32)
+        self.layers = kwargs.get("layers", 1)
+        self.dropout = kwargs.get("dropout", 0.1)
+        self.nodes = kwargs.get("nodes", 128)
+        self.epochs = kwargs.get("epochs", 400)
+        self.steps = kwargs.get("steps", 64)
         self.learning_rate_deep = kwargs.get("learning_rate_deep", 0.001)
-        #self.beta_1 = kwargs.get("beta_1", 0.9)
-        #self.beta_2 = kwargs.get("beta_2", 0.999)
+        self.beta_1 = kwargs.get("beta_1", 0.9)
+        self.beta_2 = kwargs.get("beta_2", 0.999)
 
         self._set_classifier()
 
@@ -163,7 +163,7 @@ class BasePredictions:
 
 
         elif self.clf.lower() == "neural_network":
-            def Neural_network(dropout=0.2, nodes=32, layers=3, learning_rate_deep=0.001):
+            def Neural_network(dropout=0.1, nodes=128, layers=1, learning_rate_deep=0.001):
                 clf = Sequential()
                 for i in range(self.layers):
                     #With BN
@@ -176,7 +176,7 @@ class BasePredictions:
                     clf.add(Dropout(self.dropout))
                 clf.add(Dense(3, activation="softmax"))
                 
-                opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep)#, beta_1=self.beta_1, beta_2=self.beta_2)
+                opt = keras.optimizers.Adam(learning_rate=self.learning_rate_deep,beta_1=self.beta_1, beta_2=self.beta_2)
                 clf.compile(loss = tf.keras.losses.SparseCategoricalCrossentropy(), optimizer = opt,  metrics = ["accuracy"]) #other option loss = "binary_crossentropy"
                 return clf
             self.clf = KerasClassifier(Neural_network, epochs = self.epochs, steps_per_epoch=self.steps, dropout = self.dropout, nodes = self.nodes, layers = self.layers, learning_rate_deep = self.learning_rate_deep) #class_weight=self.class_weight

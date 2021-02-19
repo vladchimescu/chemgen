@@ -171,10 +171,14 @@ class BasePredictions:
                     #clf.add(BatchNormalization())
                     #clf.add(Activation("relu"))
                     #clf.add(Dropout(self.dropout))
+
                     #Without BN
-                    clf.add(Dense(self.nodes))
-                    clf.add(LeakyReLU())
-                    #clf.add(Dense(self.nodes, activation="relu"))
+                    #LeakyReLU
+                    #clf.add(Dense(self.nodes))
+                    #clf.add(LeakyReLU())
+
+                    #ReLU
+                    clf.add(Dense(self.nodes, activation="relu"))
                     clf.add(Dropout(self.dropout))
                 clf.add(Dense(3, activation="softmax"))
                 

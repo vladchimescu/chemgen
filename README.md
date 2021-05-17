@@ -12,10 +12,20 @@ We used grid search on a pre-defined parameter grid to find optimal model hyperp
 ```
 # E. coli (Nichols data)
 bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
-data/chemgenetics/nichols_signed.csv data/chemgenetics/nichols_y.csv randomforest data/chemgenetics/interaction-genes-Ecoli
+data/chemgenetics/nichols_signed.csv data/chemgenetics/nichols_y.csv randomforest
 
 # Salmonella
 bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
-data/chemgenetics/salmonella_signed.csv data/chemgenetics/salmonella_y.csv randomforest data/chemgenetics/interaction-genes-Salmonella
+data/chemgenetics/salmonella_signed.csv data/chemgenetics/salmonella_y.csv randomforest
 ```
 
+In order to run XGBoost:
+```
+# E. coli (Nichols data)
+bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
+data/chemgenetics/nichols_signed.csv data/chemgenetics/nichols_y.csv xgboost
+
+# Salmonella
+bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
+data/chemgenetics/salmonella_signed.csv data/chemgenetics/salmonella_y.csv xgboost
+```

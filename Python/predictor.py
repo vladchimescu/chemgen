@@ -23,8 +23,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from  itertools import cycle
 from scipy.interpolate import make_interp_spline, BSpline
 
-sys.path.append('..')
-from base.chemgen_utils import split_drug_class
+from chemgen_utils import split_drug_class
 
 def export_rftrees(estimators, outdir, class_names, featname):
         if outdir is not None:

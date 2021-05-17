@@ -24,14 +24,15 @@ RF_grid = {"max_depth": list(range(2,10)) + [None],
            "n_estimators": [200, 500, 1000],
            "min_samples_split": range(2,10),
            "min_samples_leaf": range(2,10),
-           "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']}
+           "class_weight": [{0: 1, 1: i} for i in range(1,10)] + ['balanced', 'balanced_subsample']
+           }
 
-# XGB has 20 * 20 * 8 * 3 * 10 = 96000 combinations of hyperparameters
+# XGB has 20 * 10 * 4 * 3 * 10 = 24000 combinations of hyperparameters
 xgb_grid = {"learning_rate": np.logspace(-2,np.log10(0.9), 20),
-            "colsample_bytree": np.linspace(0.1,1,20),
-            "max_depth": range(2,10),
+            "colsample_bytree": np.linspace(0.1,1,10),
+            "max_depth": range(4,11,2),
             "n_estimators": [200, 500, 1000],
-            "scale_pos_weight": range(1,10)
+            "scale_pos_weight": range(1,11)
             }
 
 # DL has 10 * 10 * 5 * 5 * 5 * 10 * 10 = 1296 combinations of hyperparameters

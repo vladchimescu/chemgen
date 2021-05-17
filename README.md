@@ -4,10 +4,7 @@ The repository has a number of Jupyter notebooks in which prediction of drug-dru
 
 Furthermore Python and Slurm scripts are available for performing predictions using high-performance computing. The class for storing and cross-validating interactions is in `Python/predictor.py`. Some useful functions are in `Python/chemgen_utils.py`. 
 
-Prediction / classification of synergies and antagonisms is based either on
-+ single-compound chemical genetics data in *E. coli* and *Salmonella* (`Python/chemgen-prdict.py`)
-+ structural motifs / molecular fingerprints such as circular ECPF4 fingerprints (`Python/struct-predict.py`)
-
+Prediction / classification of synergies and antagonisms is based on single-compound chemical genetics data in *E. coli* and *Salmonella*.
 
 
 ## Hyperparameter Optimization

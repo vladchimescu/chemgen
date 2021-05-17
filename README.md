@@ -11,11 +11,11 @@ Prediction / classification of synergies and antagonisms is based on single-comp
 We used grid search on a pre-defined parameter grid to find optimal model hyperparameters. For One-vs-Rest classifier hyperparameter tuning run the followng scripts (chemical genetics):
 ```
 # E. coli (Nichols data)
-bash slurm/grid_search.sh Python/multiclass_hyperparams.py \
+bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
 data/chemgenetics/nichols_signed.csv data/chemgenetics/nichols_y.csv randomforest data/chemgenetics/interaction-genes-Ecoli
 
 # Salmonella
-bash slurm/grid_search.sh Python/multiclass_hyperparams.py \
+bash HPC_scripts/grid_search.sh Python/multiclass_hyperparams.py \
 data/chemgenetics/salmonella_signed.csv data/chemgenetics/salmonella_y.csv randomforest data/chemgenetics/interaction-genes-Salmonella
 ```
 

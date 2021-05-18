@@ -121,19 +121,25 @@ data_overview <- plotDataOverview(MOFA_obj)
 
 print(data_overview)
 
+
+
 # set model parameter
 TrainOptions <- getDefaultTrainOptions()
 ModelOptions <- getDefaultModelOptions(MOFA_obj)
 DataOptions <- getDefaultDataOptions()
 
-#ModelOptions$numFactors <- num_factors
+# number of LF's
+#num_factors = 10
+# ModelOptions$numFactors <- num_factors
 
-#TrainOptions$DropFactorThreshold <- variance_explained_cutoff 
+# at least 5% variance explained
+TrainOptions$DropFactorThreshold <- 0.05 
 # % variance explained by factor
-#TrainOptions$tolerance <- 0.01 # 0.01 is recommended
+
+TrainOptions$tolerance <- 0.01 # 0.01 is recommended
 TrainOptions$seed <- 1705 #random number
 DataOptions$scaleViews <- TRUE #unit variance, if scale is too different
-TrainOptions$maxiter <- 10 # only for testing
+#TrainOptions$maxiter <- 10 # only for testing
 
 MOFAobject <- prepareMOFA(
   MOFA_obj,
@@ -146,27 +152,29 @@ n_inits <- 10
 model_output_path = file.path(basedir, 'data/mofa_out')
 model_name = 'chemgenbliss'
 
-runMOFA(MOFAobject,
-       outfile = paste0(model_output_path,
-                        "/", Sys.Date(),
-                        "_", model_name,
-                        ".hdf5"))
+# runMOFA(MOFAobject,
+#        outfile = paste0(model_output_path,
+#                         "/", Sys.Date(),
+#                         "_", model_name,
+#                         ".hdf5"))
 
 
-# model_list <- lapply(seq_len(n_inits), function(it) {
-#   TrainOptions$seed <- 1705 + it
-#   
-#   MOFAobject <- prepareMOFA(
-#     MOFA_obj,
-#     DataOptions = DataOptions,
-#     ModelOptions = ModelOptions,
-#     TrainOptions = TrainOptions)
-#   runMOFA(MOFAobject,
-#           outfile = paste0(model_output_path,
-#                            "/", Sys.Date(),
-#                            "_", model_name,"_",
-#                            it,
-#                            ".hdf5"))
-# })
+model_list <- lapply(seq_len(n_inits), function(it) {
+  TrainOptions$seed <- 1705 + it
 
+  MOFAobject <- prepareMOFA(
+    MOFA_obj,
+    DataOptions = DataOptions,
+    ModelOptions = ModelOptions,
+    TrainOptions = TrainOptions)
+  runMOFA(MOFAobject,
+          outfile = paste0(model_output_path,
+                           "/", Sys.Date(),
+                           "_", model_name,"_",
+                           it,
+                           ".hdf5"))
+})
+
+save(model_list,
+     file = paste0(model_output_path, "/",model_name,"_list.RData"))
 

@@ -121,8 +121,6 @@ data_overview <- plotDataOverview(MOFA_obj)
 
 print(data_overview)
 
-
-
 # set model parameter
 TrainOptions <- getDefaultTrainOptions()
 ModelOptions <- getDefaultModelOptions(MOFA_obj)
@@ -133,7 +131,7 @@ DataOptions <- getDefaultDataOptions()
 # ModelOptions$numFactors <- num_factors
 
 # at least 5% variance explained
-TrainOptions$DropFactorThreshold <- 0.05 
+TrainOptions$DropFactorThreshold <- 0.01
 # % variance explained by factor
 
 TrainOptions$tolerance <- 0.01 # 0.01 is recommended
@@ -178,3 +176,7 @@ model_list <- lapply(seq_len(n_inits), function(it) {
 save(model_list,
      file = paste0(model_output_path, "/",model_name,"_list.RData"))
 
+#--------After saving the model you can load it--------------
+# load the model
+# load(paste0(model_output_path, "/",model_name,"_list.RData"))
+# model <- selectModel(model_list)

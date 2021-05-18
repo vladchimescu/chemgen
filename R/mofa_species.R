@@ -53,9 +53,16 @@ figdir = file.path(basedir, "figures/")
 # color palette
 pal = c("#FFCC33", "#009999")
 
+# remove these drugs that show up as outliers
+drugs_rm = c("CHIR-90", "Colistin", "Chlorhexidine",
+             "Meropenem", "Piperacillin", "Impipenem")
+
 # load chemical genetics data
 ecoli_chemgen = agg_conc(readRDS(file.path(datadir, 'nichols.rds')))
 st_chemgen = agg_conc(readRDS(file.path(datadir, 'ST_chemgen.rds')))
+
+ecoli_chemgen = filter(ecoli_chemgen, !drug %in% drugs_rm)
+st_chemgen = filter(st_chemgen, !drug %in% drugs_rm)
 
 # map E. coli gene names
 string.map = read.csv(file.path(datadir, "string_mapping-EcoliBW.tsv"),
@@ -74,8 +81,6 @@ ST_df = filter(bliss_all, Strain == 'ST 14028s')
 drugs_chemgen = union(st_chemgen$drug, ecoli_chemgen$drug)
 ecoli_df = filter(ecoli_df, d1 %in% drugs_chemgen & d2 %in% drugs_chemgen)
 ST_df = filter(ST_df, d1 %in% drugs_chemgen & d2 %in% drugs_chemgen)
-
-
 
 # convert all data.frames/tibbles into matrices
 
@@ -148,7 +153,7 @@ MOFAobject <- prepareMOFA(
 # use 10 random initializations
 n_inits <- 10
 model_output_path = file.path(basedir, 'data/mofa_out')
-model_name = 'chemgenbliss'
+model_name = 'chemgenbliss_drugsubset'
 
 # runMOFA(MOFAobject,
 #        outfile = paste0(model_output_path,
